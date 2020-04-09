@@ -1,0 +1,25 @@
+---
+- name: Poliwag
+  points: 5600
+- name: Bulbasaur
+  points: 5800
+- name: Shellder
+  points: 5290
+- name: Slowbro
+  points: 4900
+- name: Slowpoke
+  points: 4400
+- name: Metapod
+  points: 4780
+- name: Psyduck
+  points: 5350
+- name: Porygon
+  points: 5790
+- name: Cloyster
+  points: 5180
+- name: Pikachu
+  points:
+- name: Magikarp
+  points:
+- name: Vileplume
+  points: 4680

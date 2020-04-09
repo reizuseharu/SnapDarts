@@ -1,3 +1,7 @@
+import * as fs from "fs";
+import * as yaml from "js-yaml";
+
+
 function clamp(num: number, min: number, max: number): number {
   return num <= min ? min : num >= max ? max : num;
 }
@@ -35,6 +39,15 @@ function convertSeedToHashCode(inputSeed: string | null): [number, string] {
   hashCode = Math.abs(unhashedSeed.hashCode());
 
   return [hashCode, seed]
+}
+
+function parseStage(stage: Stage): Pokemon[] {
+  let stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`;
+  let stagePath: string = `data/${stageFile}`;
+
+  let stagePokemon: Pokemon[] = yaml.safeLoad(fs.readFileSync(stagePath, "utf8"));
+
+  return stagePokemon;
 }
 
 export enum MatchType {
@@ -80,10 +93,10 @@ function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
   return seededEnumValue
 }
 
+// ! Look into caching method
 export function generateMatch(inputSeed: string | null, inputMatchType: MatchType | null): Match {
   let [hashCode, seed]: [number, string] = convertSeedToHashCode(inputSeed);
 
-  // ! How to deal with RainbowCloud
   // Each stage has a unique min and max value
 
   let matchType: MatchType
@@ -94,27 +107,36 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
   }
 
   let goals: Goal[] = [];
+  let selectedPokemon: Set<Pokemon> = new Set();
+  let selectedStages: Map<Stage, Pokemon[]> = new Map();
+
   let pokemonAmount = clamp(hashCode % 11, 3, 7);
 
   if (matchType === MatchType.FREE_FOR_ALL) {
+
     while (pokemonAmount > 0) {
-      let stage: Stage = seededEnum(Stage, hashCode + pokemonAmount);
-      // ! Get Pokémon array per stage
-      let stagePokemon: Pokemon[] = [ { name: 'Pidgey', points: 5650 },
-      { name: 'Doduo', points: 4600 },
-      { name: 'Pikachu', points: 6000 },
-      { name: 'Butterfree', points: 4780 },
-      { name: 'Lapras', points: 3510 },
-      { name: 'Meowth', points: 4510 },
-      { name: 'Kangaskhan', points: 4100 },
-      { name: 'Eevee', points: 4500 },
-      { name: 'Snorlax', points: 4060 },
-      { name: 'Scyther', points: 4480 },
-      { name: 'Chansey', points: 4400 },
-      { name: 'Magikarp', points: 500 } ];
+      // ? Need some way to prevent one Pokémon from each stage instead of possible dupes
+      let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount);
+
+      let stagePokemon: Pokemon[];
+      if (!selectedStages.has(stage)) {
+        stagePokemon = parseStage(stage);
+        selectedStages.set(stage, stagePokemon);
+      } else {
+        let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+        if (stgPkmn === undefined) {
+          throw new Error("Invalid Stage")
+        }
+        stagePokemon = stgPkmn;
+      }
 
       let amount = stagePokemon.length;
       let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
+
+      if (selectedPokemon.has(pokemon)) {
+        continue;
+      }
+
       let score: number = (hashCode * pokemonAmount) % pokemon.points;
 
       let goal: Goal = {
@@ -124,29 +146,27 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
       };
 
       goals.push(goal);
+      selectedPokemon.add(pokemon);
 
       pokemonAmount -= 1
     }
 
   } else if (matchType === MatchType.STAGE) {
-    let stage: Stage = seededEnum(Stage, hashCode)
-    // ! Get Pokémon array per stage
-    let stagePokemon: Pokemon[] = [ { name: 'Pidgey', points: 5650 },
-      { name: 'Doduo', points: 4600 },
-      { name: 'Pikachu', points: 6000 },
-      { name: 'Butterfree', points: 4780 },
-      { name: 'Lapras', points: 3510 },
-      { name: 'Meowth', points: 4510 },
-      { name: 'Kangaskhan', points: 4100 },
-      { name: 'Eevee', points: 4500 },
-      { name: 'Snorlax', points: 4060 },
-      { name: 'Scyther', points: 4480 },
-      { name: 'Chansey', points: 4400 },
-      { name: 'Magikarp', points: 500 } ];
+    let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount)
+    let stagePokemon: Pokemon[] = parseStage(stage);
+
+    if (stagePokemon.length < pokemonAmount) {
+      pokemonAmount = stagePokemon.length;
+    }
 
     while (pokemonAmount > 0) {
       let amount = stagePokemon.length;
       let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
+
+      if (selectedPokemon.has(pokemon)) {
+        continue;
+      }
+
       let score: number = (hashCode * pokemonAmount) % pokemon.points;
 
       let goal: Goal = {
@@ -156,6 +176,7 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
       };
 
       goals.push(goal);
+      selectedPokemon.add(pokemon);
 
       pokemonAmount -= 1
     }
