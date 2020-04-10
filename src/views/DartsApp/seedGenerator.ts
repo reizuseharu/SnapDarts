@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import * as yaml from "js-yaml";
 
 
@@ -41,15 +40,6 @@ function convertSeedToHashCode(inputSeed: string | null): [number, string] {
   return [hashCode, seed]
 }
 
-function parseStage(stage: Stage): Pokemon[] {
-  let stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`;
-  let stagePath: string = `data/${stageFile}`;
-
-  let stagePokemon: Pokemon[] = yaml.safeLoad(fs.readFileSync(stagePath, "utf8"));
-
-  return stagePokemon;
-}
-
 export enum MatchType {
   STAGE,
   FREE_FOR_ALL
@@ -82,6 +72,23 @@ export interface Goal {
   score: number;
 }
 
+async function parseStage(stage: Stage): Promise<Pokemon[]> {
+  let stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`;
+  let stagePath: string = `data/${stageFile}`;
+
+  let stageData = await fetch(stagePath);
+  let stagePokemon: Pokemon[] = yaml.safeLoad(await stageData.text());
+
+  return stagePokemon;
+}
+
+let selectedStages: Map<Stage, Pokemon[]> = new Map();
+let stages: Stage[] = [Stage.BEACH, Stage.TUNNEL, Stage.VOLCANO, Stage.RIVER, Stage.CAVE, Stage.VALLEY, Stage.RAINBOW_CLOUD];
+stages.forEach(async (stage: Stage) => {
+  selectedStages.set(stage, await parseStage(stage));
+});
+
+
 function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
   const enumValues = Object.keys(anEnum)
     .map(n => Number.parseInt(n))
@@ -108,7 +115,6 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
 
   let goals: Goal[] = [];
   let selectedPokemon: Set<Pokemon> = new Set();
-  let selectedStages: Map<Stage, Pokemon[]> = new Map();
 
   let pokemonAmount = clamp(hashCode % 11, 3, 7);
 
@@ -118,17 +124,11 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
       // ? Need some way to prevent one Pokémon from each stage instead of possible dupes
       let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount);
 
-      let stagePokemon: Pokemon[];
-      if (!selectedStages.has(stage)) {
-        stagePokemon = parseStage(stage);
-        selectedStages.set(stage, stagePokemon);
-      } else {
-        let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
-        if (stgPkmn === undefined) {
-          throw new Error("Invalid Stage")
-        }
-        stagePokemon = stgPkmn;
+      let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+      if (stgPkmn === undefined) {
+        throw new Error("Invalid Stage")
       }
+      let stagePokemon: Pokemon[] = stgPkmn;
 
       let amount = stagePokemon.length;
       let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
@@ -152,8 +152,13 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
     }
 
   } else if (matchType === MatchType.STAGE) {
-    let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount)
-    let stagePokemon: Pokemon[] = parseStage(stage);
+    let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount);
+
+    let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+    if (stgPkmn === undefined) {
+      throw new Error("Invalid Stage")
+    }
+    let stagePokemon: Pokemon[] = stgPkmn;
 
     if (stagePokemon.length < pokemonAmount) {
       pokemonAmount = stagePokemon.length;
