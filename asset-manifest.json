@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/SnapDarts/static/css/main.b7813d11.chunk.css",
-    "main.js": "/SnapDarts/static/js/main.3a3ad4d9.chunk.js",
-    "main.js.map": "/SnapDarts/static/js/main.3a3ad4d9.chunk.js.map",
+    "main.js": "/SnapDarts/static/js/main.86518c67.chunk.js",
+    "main.js.map": "/SnapDarts/static/js/main.86518c67.chunk.js.map",
     "runtime-main.js": "/SnapDarts/static/js/runtime-main.2a257fc2.js",
     "runtime-main.js.map": "/SnapDarts/static/js/runtime-main.2a257fc2.js.map",
     "static/css/2.d0176e96.chunk.css": "/SnapDarts/static/css/2.d0176e96.chunk.css",
     "static/js/2.27286942.chunk.js": "/SnapDarts/static/js/2.27286942.chunk.js",
     "static/js/2.27286942.chunk.js.map": "/SnapDarts/static/js/2.27286942.chunk.js.map",
     "index.html": "/SnapDarts/index.html",
-    "precache-manifest.0255d0b4fb764715f59b871875c7d4a3.js": "/SnapDarts/precache-manifest.0255d0b4fb764715f59b871875c7d4a3.js",
+    "precache-manifest.8e76088e3ed7a0357af12d6c8c4f70a5.js": "/SnapDarts/precache-manifest.8e76088e3ed7a0357af12d6c8c4f70a5.js",
     "service-worker.js": "/SnapDarts/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/SnapDarts/static/css/2.d0176e96.chunk.css.map",
     "static/css/main.b7813d11.chunk.css.map": "/SnapDarts/static/css/main.b7813d11.chunk.css.map",
@@ -22,6 +22,6 @@
     "static/css/2.d0176e96.chunk.css",
     "static/js/2.27286942.chunk.js",
     "static/css/main.b7813d11.chunk.css",
-    "static/js/main.3a3ad4d9.chunk.js"
+    "static/js/main.86518c67.chunk.js"
   ]
 }

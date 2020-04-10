@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a7d2944d7f91780e8c30d71d42364a58",
+    "revision": "023edc5c1ca864431cdba66808d1a35d",
     "url": "/SnapDarts/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SnapDarts/static/css/2.d0176e96.chunk.css"
   },
   {
-    "revision": "9611222a4eed861ef3ce",
+    "revision": "18be72736419b6a905a8",
     "url": "/SnapDarts/static/css/main.b7813d11.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SnapDarts/static/js/2.27286942.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "9611222a4eed861ef3ce",
-    "url": "/SnapDarts/static/js/main.3a3ad4d9.chunk.js"
+    "revision": "18be72736419b6a905a8",
+    "url": "/SnapDarts/static/js/main.86518c67.chunk.js"
   },
   {
     "revision": "323b9989250b1fa56514",

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/SnapDarts/precache-manifest.0255d0b4fb764715f59b871875c7d4a3.js"
+  "/SnapDarts/precache-manifest.8e76088e3ed7a0357af12d6c8c4f70a5.js"
 );
 
 self.addEventListener('message', (event) => {
