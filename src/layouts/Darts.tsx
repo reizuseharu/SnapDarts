@@ -12,7 +12,6 @@ import routes from '../routes';
 import dashboardStyle from '../assets/jss/material-dashboard-react/layouts/dashboardStyle';
 
 import image from 'assets/img/sidebar-2.jpg';
-import DartsAppBody from "../views/DartsApp/DartsAppBody";
 import DartsAppHeader from "../views/DartsApp/DartsAppHeader";
 
 const switchRoutes = (

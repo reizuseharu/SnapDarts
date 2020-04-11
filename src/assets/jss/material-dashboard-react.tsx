@@ -5,7 +5,7 @@
  =========================================================
 
  * Copyright 2019 Reizu (http://www.reizu.dev)
- * Licensed under MIT (https://github.com/pkmnsnap/SnapDarts/blob/master/LICENSE.md)
+ * Licensed under MIT (https://github.com/reizuseharu/SnapDarts/blob/master/LICENSE.md)
 
  =========================================================
 

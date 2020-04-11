@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Game Website",
   "private": true,
-  "homepage": "https://darts.pkmnsnap.com",
+  "homepage": "https://reizuseharu.github.io",
   "dependencies": {
     "@material-ui/core": "4.5.1",
     "@material-ui/icons": "4.5.1",
