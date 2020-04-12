@@ -1,5 +1,7 @@
 import React from 'react';
 // @material-ui/core
+import queryString from 'query-string';
+
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
 import GridItem from '../../components/Grid/GridItem';
@@ -22,7 +24,8 @@ import {
 import {generateMatch, Goal, Match, MatchType, Stage} from "./seedGenerator";
 
 interface Props {
-  classes: any;
+  location: any;
+  history: any;
 }
 
 interface State {
@@ -38,17 +41,24 @@ interface State {
 class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
+    const values = queryString.parse(this.props.location.search);
+    const seed: string = values.seed !== undefined && values.seed !== null ? values.seed as string : "Snap";
+    // @ts-ignore
+    const matchType: MatchType = values.matchType !== undefined && values.matchType !== null ? MatchType[values.matchType as string] : MatchType.FREE_FOR_ALL;
+
     this.state = {
-      matchType: MatchType.FREE_FOR_ALL,
-      seed: "Snap",
+      matchType: matchType,
+      seed: seed,
       goals: [],
-      currentSeed: "",
-      currentMatchType: MatchType.FREE_FOR_ALL,
+      currentSeed: seed,
+      currentMatchType: matchType,
       currentScore: 0,
       pokemonScore: new Map()
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange = (event: any, matchType: MatchType, seed: string, goals: Goal[], currentScore: number) => {
     this.setState({
       matchType: matchType,
@@ -60,9 +70,9 @@ class Dashboard extends React.Component<Props, State> {
     });
   };
 
-  handleButtonClick = (event: any) => {
+  handleGameGenerate = async () => {
     this.state.pokemonScore.clear();
-    let match: Match = generateMatch(this.state.seed, this.state.matchType);
+    let match: Match = await generateMatch(this.state.seed, this.state.matchType);
     this.setState({
       matchType: this.state.matchType,
       seed: this.state.seed,
@@ -72,6 +82,10 @@ class Dashboard extends React.Component<Props, State> {
       currentScore: 0,
       pokemonScore: this.state.pokemonScore
     });
+    this.props.history.push({
+      pathname: '/',
+      search: `?seed=${this.state.seed}&matchType=${MatchType[this.state.matchType]}`
+    })
   };
 
   handleInputChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -160,7 +174,7 @@ class Dashboard extends React.Component<Props, State> {
               onChange={this.handleInputChange}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
-                  this.handleButtonClick(e)
+                  this.handleGameGenerate()
                 }
               }}
             />
@@ -175,7 +189,7 @@ class Dashboard extends React.Component<Props, State> {
             <Button
               fullWidth={true}
               color="success"
-              onClick={this.handleButtonClick}
+              onClick={this.handleGameGenerate}
               >
               Generate
             </Button>

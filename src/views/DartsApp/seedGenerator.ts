@@ -101,7 +101,7 @@ function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
 }
 
 // ! Look into caching method
-export function generateMatch(inputSeed: string | null, inputMatchType: MatchType | null): Match {
+export async function generateMatch(inputSeed: string | null, inputMatchType: MatchType | null): Promise<Match> {
   let [hashCode, seed]: [number, string] = convertSeedToHashCode(inputSeed);
 
   // Each stage has a unique min and max value
@@ -196,9 +196,3 @@ export function generateMatch(inputSeed: string | null, inputMatchType: MatchTyp
     goals: goals
   }
 }
-
-// let match = generateMatch("BRUH", MatchType.STAGE)
-// let match = generateMatch(null, null);
-
-// console.dir(match);
-// console.log(match.goals);

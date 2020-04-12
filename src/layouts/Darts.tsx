@@ -33,6 +33,7 @@ const switchRoutes = (
 interface Props {
   classes: any;
   location: any;
+  history: any;
 }
 
 interface State {
@@ -109,7 +110,8 @@ class Darts extends React.Component<Props, State> {
   render() {
     const { classes, ...rest } = this.props;
     return (
-      <DartsAppHeader/>
+      // @ts-ignore
+      <DartsAppHeader location={this.props.location} history={this.props.history}/>
     );
   }
 }
