@@ -4,7 +4,7 @@
 - name: Doduo
   points: 4600
 - name: Pikachu
-  points:
+  points: 6500
 - name: Butterfree
   points: 4780
 - name: Lapras
@@ -22,4 +22,4 @@
 - name: Chansey
   points: 4400
 - name: Magikarp
-  points:
+  points: 2500
