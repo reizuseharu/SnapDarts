@@ -193,7 +193,7 @@ class Dashboard extends React.Component<Props, State> {
             </Button>
           </GridItem>
         </GridContainer>
-        <Table aria-label="simple table">
+        <Table size="small" aria-label="a dense table">
           <TableHead style={{backgroundColor: "#ADD8E6"}}>
             <TableCell align="center">Stage</TableCell>
             <TableCell align="center">Pokémon</TableCell>
