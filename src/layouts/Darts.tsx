@@ -2,7 +2,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 // creates a beautiful scrollbar
-import PerfectScrollbar from 'perfect-scrollbar';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
