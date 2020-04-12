@@ -174,7 +174,7 @@ class Dashboard extends React.Component<Props, State> {
           <GridItem xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
-              color="primary"
+              color="success"
               onClick={this.handleButtonClick}
               >
               Generate
@@ -186,23 +186,23 @@ class Dashboard extends React.Component<Props, State> {
           <GridItem xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
-              color="primary"
+              color="rose"
               onClick={this.handleScoreCalculation}
             >
               Calculate
             </Button>
           </GridItem>
         </GridContainer>
-        <Table>
-          <TableHead style={{backgroundColor: "green"}}>
+        <Table aria-label="simple table">
+          <TableHead style={{backgroundColor: "#ADD8E6"}}>
             <TableCell align="center">Stage</TableCell>
             <TableCell align="center">Pokémon</TableCell>
             <TableCell align="center">Point Goal</TableCell>
             <TableCell align="center">Player Points</TableCell>
           </TableHead>
           <TableBody>
-            {this.state.goals.map((goal: Goal) => {
-              return <TableRow hover={true}>
+            {this.state.goals.map((goal: Goal, index: number) => {
+              return <TableRow hover={true} style={(() => { if (index % 2 === 0) return {backgroundColor: "#FFCCCB"}})()}>
                 <TableCell align="center">{Stage[goal.stage]}</TableCell>
                 <TableCell align="center">{goal.pokemon.name}</TableCell>
                 <TableCell align="center">{goal.score}</TableCell>
