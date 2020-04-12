@@ -43,7 +43,8 @@ class Dashboard extends React.Component<Props, State> {
     super(props);
 
     const values = queryString.parse(this.props.location.search);
-    const seed: string = values.seed !== undefined && values.seed !== null ? values.seed as string : "Snap";
+    const randomSeed: string = `${Math.floor(Math.random() * 999999) + 1}`;
+    const seed: string = values.seed !== undefined && values.seed !== null ? values.seed as string : randomSeed;
     // @ts-ignore
     const matchType: MatchType = values.matchType !== undefined && values.matchType !== null ? MatchType[values.matchType as string] : MatchType.FREE_FOR_ALL;
 
@@ -75,7 +76,7 @@ class Dashboard extends React.Component<Props, State> {
     let match: Match = await generateMatch(this.state.seed, this.state.matchType);
     this.setState({
       matchType: this.state.matchType,
-      seed: this.state.seed,
+      seed: "",
       goals: match.goals,
       currentSeed: this.state.seed,
       currentMatchType: this.state.matchType,
@@ -83,8 +84,8 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: this.state.pokemonScore
     });
     this.props.history.push({
-      pathname: '/',
-      search: `?seed=${this.state.seed}&matchType=${MatchType[this.state.matchType]}`
+      pathname: '',
+      search: `?seed=${this.state.currentSeed}&matchType=${MatchType[this.state.matchType]}`
     })
   };
 
