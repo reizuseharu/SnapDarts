@@ -6,7 +6,7 @@
 - name: Muk
   points: 4000
 - name: Bulbasaur
-  points:
+  points: 5400
 - name: Jigglypuff
   points: 6550
 - name: Koffing
@@ -24,4 +24,4 @@
 - name: Pikachu
   points: 8000
 - name: Magikarp
-  points:
+  points: 4000
