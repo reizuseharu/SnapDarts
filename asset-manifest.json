@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.b7813d11.chunk.css",
-    "main.js": "/static/js/main.5efc03f0.chunk.js",
-    "main.js.map": "/static/js/main.5efc03f0.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.696b4ca4.js",
-    "runtime-main.js.map": "/static/js/runtime-main.696b4ca4.js.map",
-    "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.539f54c8.chunk.js": "/static/js/2.539f54c8.chunk.js",
-    "static/js/2.539f54c8.chunk.js.map": "/static/js/2.539f54c8.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.6acf0fdd2dda84b46aff09810afcff1c.js": "/precache-manifest.6acf0fdd2dda84b46aff09810afcff1c.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.b7813d11.chunk.css.map": "/static/css/main.b7813d11.chunk.css.map",
-    "static/js/2.539f54c8.chunk.js.LICENSE.txt": "/static/js/2.539f54c8.chunk.js.LICENSE.txt",
-    "static/media/marc.jpg": "/static/media/marc.8880a65c.jpg",
-    "static/media/sidebar-2.jpg": "/static/media/sidebar-2.310509c9.jpg"
+    "main.css": "./static/css/main.b7813d11.chunk.css",
+    "main.js": "./static/js/main.52c88a8d.chunk.js",
+    "main.js.map": "./static/js/main.52c88a8d.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.0ae2b862.js",
+    "runtime-main.js.map": "./static/js/runtime-main.0ae2b862.js.map",
+    "static/css/2.d0176e96.chunk.css": "./static/css/2.d0176e96.chunk.css",
+    "static/js/2.539f54c8.chunk.js": "./static/js/2.539f54c8.chunk.js",
+    "static/js/2.539f54c8.chunk.js.map": "./static/js/2.539f54c8.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.526c93c0c177b5b972ddead80da84420.js": "./precache-manifest.526c93c0c177b5b972ddead80da84420.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.d0176e96.chunk.css.map": "./static/css/2.d0176e96.chunk.css.map",
+    "static/css/main.b7813d11.chunk.css.map": "./static/css/main.b7813d11.chunk.css.map",
+    "static/js/2.539f54c8.chunk.js.LICENSE.txt": "./static/js/2.539f54c8.chunk.js.LICENSE.txt",
+    "static/media/marc.jpg": "./static/media/marc.8880a65c.jpg",
+    "static/media/sidebar-2.jpg": "./static/media/sidebar-2.310509c9.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.696b4ca4.js",
+    "static/js/runtime-main.0ae2b862.js",
     "static/css/2.d0176e96.chunk.css",
     "static/js/2.539f54c8.chunk.js",
     "static/css/main.b7813d11.chunk.css",
-    "static/js/main.5efc03f0.chunk.js"
+    "static/js/main.52c88a8d.chunk.js"
   ]
 }
