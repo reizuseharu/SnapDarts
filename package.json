@@ -4,7 +4,7 @@
   "description": "Game Website",
   "private": true,
   "main": "public/Main.js",
-  "homepage": "https://reizuseharu.github.io",
+  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "4.5.1",
     "@material-ui/icons": "4.5.1",
@@ -37,7 +37,9 @@
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
-    "electron-start": "electron ."
+    "electron-start": "electron .",
+    "preelectron-pack": "yarn run build",
+    "electron-pack": "electron-builder --win --macos -c.extraMetadata.main=build/Main.js"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
@@ -50,6 +52,7 @@
     "@types/react-dom": "^16.9.1",
     "@types/react-router-dom": "^5.1.0",
     "electron": "^8.2.2",
+    "electron-builder": "^22.4.1",
     "glob": "latest",
     "jquery": "^3.4.1",
     "query-string": "latest",
@@ -68,5 +71,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "build": {"appId": "nonExistentID","files": ["build/**/*","node_modules/**/*"],"directories":{"buildResources": "assets"}}
 }
