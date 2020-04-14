@@ -21,7 +21,7 @@ import {
   TableRow,
   TextField
 } from "@material-ui/core";
-import {generateMatch, Goal, Match, MatchType, Stage} from "./seedGenerator";
+import {generateMatch, Goal, Match, MatchType, parseStage, Pokemon, Stage} from "./seedGenerator";
 
 interface Props {
   location: any;
@@ -35,7 +35,9 @@ interface State {
   currentSeed: string;
   currentMatchType: MatchType;
   currentScore: number;
-  pokemonScore: Map<Goal, number>
+  pokemonScore: Map<Goal, number>,
+  selectedStages: Map<Stage, Pokemon[]>,
+  hasLoaded: boolean
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -55,25 +57,30 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: seed,
       currentMatchType: matchType,
       currentScore: 0,
-      pokemonScore: new Map()
+      pokemonScore: new Map(),
+      selectedStages: new Map(),
+      hasLoaded: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = (event: any, matchType: MatchType, seed: string, goals: Goal[], currentScore: number) => {
+  handleChange = (event: any, matchType: MatchType, seed: string, goals: Goal[], currentScore: number, pokemonScore: Map<Goal, number>, selectedStages: Map<Stage, Pokemon[]>, hasLoaded: boolean) => {
     this.setState({
       matchType: matchType,
       seed: seed,
       goals: goals,
       currentSeed: seed,
       currentMatchType: matchType,
-      currentScore
+      currentScore: currentScore,
+      pokemonScore: pokemonScore,
+      selectedStages: selectedStages,
+      hasLoaded: hasLoaded
     });
   };
 
   handleGameGenerate = async () => {
     this.state.pokemonScore.clear();
-    let match: Match = await generateMatch(this.state.seed, this.state.matchType);
+    let match: Match = await generateMatch(this.state.selectedStages, this.state.seed, this.state.matchType);
     this.setState({
       matchType: this.state.matchType,
       seed: "",
@@ -81,7 +88,9 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: this.state.seed,
       currentMatchType: this.state.matchType,
       currentScore: 0,
-      pokemonScore: this.state.pokemonScore
+      pokemonScore: this.state.pokemonScore,
+      selectedStages: this.state.selectedStages,
+      hasLoaded: this.state.hasLoaded
     });
     this.props.history.push({
       pathname: '',
@@ -98,7 +107,9 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
       currentScore: this.state.currentScore,
-      pokemonScore: this.state.pokemonScore
+      pokemonScore: this.state.pokemonScore,
+      selectedStages: this.state.selectedStages,
+      hasLoaded: this.state.hasLoaded
     });
   };
 
@@ -112,7 +123,9 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
       currentScore: this.state.currentScore,
-      pokemonScore: this.state.pokemonScore
+      pokemonScore: this.state.pokemonScore,
+      selectedStages: this.state.selectedStages,
+      hasLoaded: this.state.hasLoaded
     });
   };
 
@@ -127,7 +140,9 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
       currentScore: this.state.currentScore,
-      pokemonScore: newPokemonScore
+      pokemonScore: newPokemonScore,
+      selectedStages: this.state.selectedStages,
+      hasLoaded: this.state.hasLoaded
     });
   };
 
@@ -144,9 +159,37 @@ class Dashboard extends React.Component<Props, State> {
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
       currentScore: currentScore,
-      pokemonScore: this.state.pokemonScore
+      pokemonScore: this.state.pokemonScore,
+      selectedStages: this.state.selectedStages,
+      hasLoaded: this.state.hasLoaded
     });
   };
+
+  async componentWillMount() {
+    if (!this.state.hasLoaded) {
+      let selectedStages: Map<Stage, Pokemon[]> = new Map();
+      let stages: Stage[] = [Stage.BEACH, Stage.TUNNEL, Stage.VOLCANO, Stage.RIVER, Stage.CAVE, Stage.VALLEY, Stage.RAINBOW_CLOUD];
+      for (let stage of stages) {
+        selectedStages.set(stage, await parseStage(stage));
+      }
+
+
+      this.setState({
+        matchType: this.state.matchType,
+        seed: this.state.seed,
+        goals: this.state.goals,
+        currentSeed: this.state.currentSeed,
+        currentMatchType: this.state.currentMatchType,
+        currentScore: this.state.currentScore,
+        pokemonScore: this.state.pokemonScore,
+        selectedStages: selectedStages,
+        hasLoaded: true
+      });
+
+      await this.handleGameGenerate();
+    }
+    return Promise.resolve();
+  }
 
   render() {
     return (

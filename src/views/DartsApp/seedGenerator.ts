@@ -72,7 +72,7 @@ export interface Goal {
   score: number;
 }
 
-async function parseStage(stage: Stage): Promise<Pokemon[]> {
+export async function parseStage(stage: Stage): Promise<Pokemon[]> {
   let stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`;
   let stagePath: string = `data/${stageFile}`;
 
@@ -81,13 +81,6 @@ async function parseStage(stage: Stage): Promise<Pokemon[]> {
 
   return stagePokemon;
 }
-
-let selectedStages: Map<Stage, Pokemon[]> = new Map();
-let stages: Stage[] = [Stage.BEACH, Stage.TUNNEL, Stage.VOLCANO, Stage.RIVER, Stage.CAVE, Stage.VALLEY, Stage.RAINBOW_CLOUD];
-stages.forEach(async (stage: Stage) => {
-  selectedStages.set(stage, await parseStage(stage));
-});
-
 
 function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
   const enumValues = Object.keys(anEnum)
@@ -101,7 +94,7 @@ function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
 }
 
 // ! Look into caching method
-export async function generateMatch(inputSeed: string | null, inputMatchType: MatchType | null): Promise<Match> {
+export async function generateMatch(selectedStages: Map<Stage, Pokemon[]>, inputSeed: string | null, inputMatchType: MatchType | null): Promise<Match> {
   let [hashCode, seed]: [number, string] = convertSeedToHashCode(inputSeed);
 
   // Each stage has a unique min and max value
@@ -117,14 +110,16 @@ export async function generateMatch(inputSeed: string | null, inputMatchType: Ma
   let selectedPokemon: Set<Pokemon> = new Set();
 
   let pokemonAmount = clamp(hashCode % 11, 3, 7);
+  let doppelgangerCount: number = 0;
 
   if (matchType === MatchType.FREE_FOR_ALL) {
 
     while (pokemonAmount > 0) {
       // ? Need some way to prevent one Pokémon from each stage instead of possible dupes
-      let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount);
+      let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount + doppelgangerCount * 1e20);
 
       let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+
       if (stgPkmn === undefined) {
         throw new Error("Invalid Stage")
       }
@@ -134,6 +129,7 @@ export async function generateMatch(inputSeed: string | null, inputMatchType: Ma
       let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
 
       if (selectedPokemon.has(pokemon)) {
+        doppelgangerCount += 1;
         continue;
       }
 
@@ -148,7 +144,7 @@ export async function generateMatch(inputSeed: string | null, inputMatchType: Ma
       goals.push(goal);
       selectedPokemon.add(pokemon);
 
-      pokemonAmount -= 1
+      pokemonAmount -= 1;
     }
 
   } else if (matchType === MatchType.STAGE) {
@@ -166,9 +162,10 @@ export async function generateMatch(inputSeed: string | null, inputMatchType: Ma
 
     while (pokemonAmount > 0) {
       let amount = stagePokemon.length;
-      let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
+      let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount + doppelgangerCount) % amount];
 
       if (selectedPokemon.has(pokemon)) {
+        doppelgangerCount += 1;
         continue;
       }
 
@@ -183,7 +180,7 @@ export async function generateMatch(inputSeed: string | null, inputMatchType: Ma
       goals.push(goal);
       selectedPokemon.add(pokemon);
 
-      pokemonAmount -= 1
+      pokemonAmount -= 1;
     }
 
   } else {
