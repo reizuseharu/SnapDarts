@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Game Website",
   "private": true,
+  "main": "public/Main.js",
   "homepage": "https://reizuseharu.github.io",
   "dependencies": {
     "@material-ui/core": "4.5.1",
@@ -22,11 +23,11 @@
     "react-chartist": "0.13.3",
     "react-dom": "^16.10.2",
     "react-google-maps": "9.4.5",
+    "react-perfect-scrollbar": "latest",
     "react-router-dom": "5.0.1",
     "react-scripts": "^3.2.0",
     "react-swipeable-views": "0.13.3",
-    "sass-loader": "^8.0.0",
-    "react-perfect-scrollbar": "latest"
+    "sass-loader": "^8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,7 +36,8 @@
     "sass": "node-sass -w src/sass/ -o src/css/",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-start": "electron ."
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
@@ -47,12 +49,13 @@
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "@types/react-router-dom": "^5.1.0",
+    "electron": "^8.2.2",
     "glob": "latest",
     "jquery": "^3.4.1",
     "query-string": "latest",
+    "react-perfect-scrollbar": "latest",
     "seedrandom": "^3.0.5",
-    "typescript": "^3.6.4",
-    "react-perfect-scrollbar": "latest"
+    "typescript": "^3.6.4"
   },
   "browserslist": {
     "production": [
