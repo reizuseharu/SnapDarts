@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 // @material-ui/core
-import queryString from 'query-string';
+import queryString from 'query-string'
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from '@material-ui/core/styles/withStyles'
 
-import dashboardStyle from '@assets/jss/material-dashboard-react/views/dashboardStyle';
-import MenuItem from "@material-ui/core/MenuItem";
+import dashboardStyle from '@assets/jss/material-dashboard-react/views/dashboardStyle'
+import MenuItem from "@material-ui/core/MenuItem"
 import {
   Button,
   FormControl, Grid,
@@ -17,21 +17,21 @@ import {
   TableHead,
   TableRow,
   TextField
-} from "@material-ui/core";
-import {generateMatch, Goal, Match, MatchType, parseStage, Pokemon, Stage} from "@services/seedGenerator";
+} from "@material-ui/core"
+import {generateMatch, Goal, Match, MatchType, parseStage, Pokemon, Stage} from "@services/seedGenerator"
 
 interface Props {
-  location: any;
-  history: any;
+  location: any
+  history: any
 }
 
 interface State {
-  matchType: MatchType;
-  seed: string;
-  goals: Goal[];
-  currentSeed: string;
-  currentMatchType: MatchType;
-  currentScore: number;
+  matchType: MatchType
+  seed: string
+  goals: Goal[]
+  currentSeed: string
+  currentMatchType: MatchType
+  currentScore: number
   pokemonScore: Map<Goal, number>,
   selectedStages: Map<Stage, Pokemon[]>,
   hasLoaded: boolean
@@ -39,17 +39,17 @@ interface State {
 
 class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
-    super(props);
+    super(props)
 
-    const values = queryString.parse(this.props.location.search);
-    const randomSeed: string = `${Math.floor(Math.random() * 999999) + 1}`;
-    const seed: string = values.seed !== undefined && values.seed !== null ? values.seed as string : randomSeed;
+    const values = queryString.parse(this.props.location.search)
+    const randomSeed: string = `${Math.floor(Math.random() * 999999) + 1}`
+    const seed: string = values.seed !== undefined && values.seed !== null ? values.seed as string : randomSeed
     // @ts-ignore
-    const matchType: MatchType = values.matchType !== undefined && values.matchType !== null ? MatchType[values.matchType as string] : MatchType.FREE_FOR_ALL;
+    const matchType: MatchType = values.matchType !== undefined && values.matchType !== null ? MatchType[values.matchType as string] : MatchType.FREE_FOR_ALL
 
     this.state = {
-      matchType: matchType,
-      seed: seed,
+      matchType,
+      seed,
       goals: [],
       currentSeed: seed,
       currentMatchType: matchType,
@@ -57,27 +57,27 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: new Map(),
       selectedStages: new Map(),
       hasLoaded: false
-    };
-    this.handleChange = this.handleChange.bind(this);
+    }
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange = (event: any, matchType: MatchType, seed: string, goals: Goal[], currentScore: number, pokemonScore: Map<Goal, number>, selectedStages: Map<Stage, Pokemon[]>, hasLoaded: boolean) => {
     this.setState({
-      matchType: matchType,
-      seed: seed,
-      goals: goals,
+      matchType,
+      seed,
+      goals,
       currentSeed: seed,
       currentMatchType: matchType,
-      currentScore: currentScore,
-      pokemonScore: pokemonScore,
-      selectedStages: selectedStages,
-      hasLoaded: hasLoaded
-    });
-  };
+      currentScore,
+      pokemonScore,
+      selectedStages,
+      hasLoaded
+    })
+  }
 
   handleGameGenerate = async () => {
-    this.state.pokemonScore.clear();
-    let match: Match = await generateMatch(this.state.selectedStages, this.state.seed, this.state.matchType);
+    this.state.pokemonScore.clear()
+    const match: Match = await generateMatch(this.state.selectedStages, this.state.seed, this.state.matchType)
     this.setState({
       matchType: this.state.matchType,
       seed: "",
@@ -88,18 +88,18 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: this.state.pokemonScore,
       selectedStages: this.state.selectedStages,
       hasLoaded: this.state.hasLoaded
-    });
+    })
     this.props.history.push({
       pathname: '',
       search: `?seed=${this.state.currentSeed}&matchType=${MatchType[this.state.matchType]}`
     })
-  };
+  }
 
   handleInputChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    let seed: string = event.target.value as string;
+    const seed: string = event.target.value as string
     this.setState({
       matchType: this.state.matchType,
-      seed: seed,
+      seed,
       goals: this.state.goals,
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
@@ -107,14 +107,14 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: this.state.pokemonScore,
       selectedStages: this.state.selectedStages,
       hasLoaded: this.state.hasLoaded
-    });
-  };
+    })
+  }
 
   handleDropdownChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    let matchTypeValue: string = event.target.value as string;
-    let matchType: MatchType = MatchType[matchTypeValue as keyof typeof MatchType];
+    const matchTypeValue: string = event.target.value as string
+    const matchType: MatchType = MatchType[matchTypeValue as keyof typeof MatchType]
     this.setState({
-      matchType: matchType,
+      matchType,
       seed: this.state.seed,
       goals: this.state.goals,
       currentSeed: this.state.currentSeed,
@@ -123,13 +123,13 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: this.state.pokemonScore,
       selectedStages: this.state.selectedStages,
       hasLoaded: this.state.hasLoaded
-    });
-  };
+    })
+  }
 
   handleScoreChange = (event: React.ChangeEvent<{ value: unknown }>, goal: Goal) => {
-    let specificPokemonScore = event.target.value as number;
-    let newPokemonScore: Map<Goal, number> = this.state.pokemonScore;
-    newPokemonScore.set(goal, specificPokemonScore);
+    const specificPokemonScore = event.target.value as number
+    const newPokemonScore: Map<Goal, number> = this.state.pokemonScore
+    newPokemonScore.set(goal, specificPokemonScore)
     this.setState({
       matchType: this.state.matchType,
       seed: this.state.seed,
@@ -140,34 +140,44 @@ class Dashboard extends React.Component<Props, State> {
       pokemonScore: newPokemonScore,
       selectedStages: this.state.selectedStages,
       hasLoaded: this.state.hasLoaded
-    });
-  };
+    })
+  }
 
   handleScoreCalculation = () => {
     // ! Create score calculation
-    let currentScore = 0;
+    let currentScore = 0
     this.state.pokemonScore.forEach((specificScore: number, specificGoal: Goal) => {
-      currentScore += Math.floor(Math.abs(specificGoal.pokemon.points - Math.abs(specificGoal.score - specificScore)) / 100);
-    });
+      currentScore += Math.floor(Math.abs(specificGoal.pokemon.points - Math.abs(specificGoal.score - specificScore)) / 100)
+    })
     this.setState({
       matchType: this.state.matchType,
       seed: this.state.seed,
       goals: this.state.goals,
       currentSeed: this.state.currentSeed,
       currentMatchType: this.state.currentMatchType,
-      currentScore: currentScore,
+      currentScore,
       pokemonScore: this.state.pokemonScore,
       selectedStages: this.state.selectedStages,
       hasLoaded: this.state.hasLoaded
-    });
-  };
+    })
+  }
+
+  onKeyPressGenerateGame(e: { key: string }) {
+    if (e.key === "Enter") {
+      this.handleGameGenerate()
+    }
+  }
+
+  onChangeCalculateScore(e: React.ChangeEvent<{ value: unknown }>, goal: Goal) {
+    this.handleScoreChange(e, goal)
+  }
 
   async componentWillMount() {
     if (!this.state.hasLoaded) {
-      let selectedStages: Map<Stage, Pokemon[]> = new Map();
-      let stages: Stage[] = [Stage.BEACH, Stage.TUNNEL, Stage.VOLCANO, Stage.RIVER, Stage.CAVE, Stage.VALLEY, Stage.RAINBOW_CLOUD];
-      for (let stage of stages) {
-        selectedStages.set(stage, await parseStage(stage));
+      const selectedStages: Map<Stage, Pokemon[]> = new Map()
+      const stages: Stage[] = [Stage.BEACH, Stage.TUNNEL, Stage.VOLCANO, Stage.RIVER, Stage.CAVE, Stage.VALLEY, Stage.RAINBOW_CLOUD]
+      for (const stage of stages) {
+        selectedStages.set(stage, await parseStage(stage))
       }
 
 
@@ -179,20 +189,20 @@ class Dashboard extends React.Component<Props, State> {
         currentMatchType: this.state.currentMatchType,
         currentScore: this.state.currentScore,
         pokemonScore: this.state.pokemonScore,
-        selectedStages: selectedStages,
+        selectedStages,
         hasLoaded: true
-      });
+      })
 
-      await this.handleGameGenerate();
+      await this.handleGameGenerate()
     }
-    return Promise.resolve();
+    return Promise.resolve()
   }
 
   render() {
     return (
       <div>
-        <Grid container>
-          <Grid item xs={6} sm={3} md={2}>
+        <Grid container={true}>
+          <Grid item={true} xs={6} sm={3} md={2}>
             <FormControl
               fullWidth={true}
             >
@@ -207,26 +217,22 @@ class Dashboard extends React.Component<Props, State> {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={4} sm={2} md={1}>
+          <Grid item={true} xs={4} sm={2} md={1}>
             <TextField
               id="standard-basic"
               label="Seed"
               value={this.state.seed}
               onChange={this.handleInputChange}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  this.handleGameGenerate()
-                }
-              }}
+              onKeyPress={this.onKeyPressGenerateGame}
             />
           </Grid>
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item={true} xs={6} sm={4} md={2}>
             Current Mode:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{MatchType[this.state.currentMatchType]}</InputLabel>
           </Grid>
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item={true} xs={6} sm={4} md={2}>
             Current Seed:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{this.state.currentSeed}</InputLabel>
           </Grid>
-          <Grid item xs={3} sm={2} md={1}>
+          <Grid item={true} xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
               color="primary"
@@ -235,10 +241,10 @@ class Dashboard extends React.Component<Props, State> {
               Generate
             </Button>
           </Grid>
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item={true} xs={6} sm={4} md={2}>
             Current Score:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{this.state.currentScore}</InputLabel>
           </Grid>
-          <Grid item xs={3} sm={2} md={1}>
+          <Grid item={true} xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
               color="secondary"
@@ -257,6 +263,7 @@ class Dashboard extends React.Component<Props, State> {
           </TableHead>
           <TableBody>
             {this.state.goals.map((goal: Goal, index: number) => {
+              // tslint:disable-next-line:jsx-key
               return <TableRow hover={true} style={(() => { if (index % 2 === 0) return {backgroundColor: "#FFCCCB"}})()}>
                 <TableCell align="center">{Stage[goal.stage]}</TableCell>
                 <TableCell align="center">{goal.pokemon.name}</TableCell>
@@ -270,13 +277,13 @@ class Dashboard extends React.Component<Props, State> {
                     onChange={e => this.handleScoreChange(e, goal)}
                   />
                 </TableCell>
-              </TableRow>;
+              </TableRow>
             })}
           </TableBody>
 
         </Table>
       </div>
-    );
+    )
   }
 }
 
@@ -284,4 +291,4 @@ class Dashboard extends React.Component<Props, State> {
 //   classes: PropTypes.object.isRequired
 // };
 
-export default withStyles(dashboardStyle)(Dashboard);
+export default withStyles(dashboardStyle)(Dashboard)

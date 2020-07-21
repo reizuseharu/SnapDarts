@@ -1,32 +1,33 @@
-import * as yaml from "js-yaml";
+import * as yaml from "js-yaml"
 
 
 function clamp(num: number, min: number, max: number): number {
-  return num <= min ? min : num >= max ? max : num;
+  return num <= min ? min : num >= max ? max : num
 }
 
 function randomHex(): string {
-  return (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, "0")
+  return (Math.random() * 0xFFFFFF).toString(16).padStart(6, "0")
 }
 
 String.prototype.hashCode = function() {
-  let hash: number = 0;
+  let hash: number = 0
 
   // Convert to 32bit integer
   for (let i = 0; i < this.length; i++) {
-      let character: number = this.charCodeAt(i);
-      hash = ((hash << 5) - hash) + character;
-      hash = hash & hash
+      const character: number = this.charCodeAt(i)
+      hash = ((hash * 32) - hash) + character
+    // tslint:disable-next-line:no-bitwise
+    hash &= hash
   }
 
   return hash
-};
+}
 
 function convertSeedToHashCode(inputSeed: string | null): [number, string] {
-  let STATIC_SALT: string = "Pokémon Snap";
+  const STATIC_SALT: string = "Pokémon Snap"
 
-  let hashCode: number;
-  let seed: string;
+  let hashCode: number
+  let seed: string
 
   if (inputSeed !== null) {
     seed = inputSeed
@@ -34,8 +35,8 @@ function convertSeedToHashCode(inputSeed: string | null): [number, string] {
     seed = randomHex()
   }
 
-  let unhashedSeed: string = `${seed}-${STATIC_SALT}`;
-  hashCode = Math.abs(unhashedSeed.hashCode());
+  const unhashedSeed: string = `${seed}-${STATIC_SALT}`
+  hashCode = Math.abs(unhashedSeed.hashCode())
 
   return [hashCode, seed]
 }
@@ -46,9 +47,9 @@ export enum MatchType {
 }
 
 export interface Match {
-  seed: string;
-  type: MatchType;
-  goals: Goal[];
+  seed: string
+  type: MatchType
+  goals: Goal[]
 }
 
 export enum Stage {
@@ -62,40 +63,36 @@ export enum Stage {
 }
 
 export interface Pokemon {
-  name: string;
-  points: number;
+  name: string
+  points: number
 }
 
 export interface Goal {
-  stage: Stage;
-  pokemon: Pokemon;
-  score: number;
+  stage: Stage
+  pokemon: Pokemon
+  score: number
 }
 
 export async function parseStage(stage: Stage): Promise<Pokemon[]> {
-  let stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`;
-  let stagePath: string = `data/${stageFile}`;
+  const stageFile: string = `${Stage[stage].toLowerCase().replace("_", "-")}.yml`
+  const stagePath: string = `data/${stageFile}`
 
-  let stageData = await fetch(stagePath);
-  let stagePokemon: Pokemon[] = yaml.safeLoad(await stageData.text());
-
-  return stagePokemon;
+  const stageData = await fetch(stagePath)
+  return yaml.safeLoad(await stageData.text())
 }
 
 function seededEnum<T>(anEnum: T, hashCode: number): T[keyof T] {
   const enumValues = Object.keys(anEnum)
-    .map(n => Number.parseInt(n))
-    .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][];
+    .map(n => Number.parseInt(n, 10))
+    .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
 
-  const seededIndex = hashCode % enumValues.length;
-  const seededEnumValue = enumValues[seededIndex];
-
-  return seededEnumValue
+  const seededIndex = hashCode % enumValues.length
+  return enumValues[seededIndex]
 }
 
 // ! Look into caching method
 export async function generateMatch(selectedStages: Map<Stage, Pokemon[]>, inputSeed: string | null, inputMatchType: MatchType | null): Promise<Match> {
-  let [hashCode, seed]: [number, string] = convertSeedToHashCode(inputSeed);
+  const [hashCode, seed]: [number, string] = convertSeedToHashCode(inputSeed)
 
   // Each stage has a unique min and max value
 
@@ -106,81 +103,81 @@ export async function generateMatch(selectedStages: Map<Stage, Pokemon[]>, input
     matchType = seededEnum(MatchType, hashCode)
   }
 
-  let goals: Goal[] = [];
-  let selectedPokemon: Set<Pokemon> = new Set();
+  const goals: Goal[] = []
+  const selectedPokemon: Set<Pokemon> = new Set()
 
-  let pokemonAmount = clamp(hashCode % 11, 3, 7);
-  let doppelgangerCount: number = 0;
+  let pokemonAmount = clamp(hashCode % 11, 3, 7)
+  let doppelgangerCount: number = 0
 
   if (matchType === MatchType.FREE_FOR_ALL) {
 
     while (pokemonAmount > 0) {
       // ? Need some way to prevent one Pokémon from each stage instead of possible dupes
-      let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount + doppelgangerCount * 1e20);
+      const stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount + doppelgangerCount * 1e20)
 
-      let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+      const stgPkmn: Pokemon[] | undefined = selectedStages.get(stage)
 
       if (stgPkmn === undefined) {
         throw new Error("Invalid Stage")
       }
-      let stagePokemon: Pokemon[] = stgPkmn;
+      const stagePokemon: Pokemon[] = stgPkmn
 
-      let amount = stagePokemon.length;
-      let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount];
+      const amount = stagePokemon.length
+      const pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount) % amount]
 
       if (selectedPokemon.has(pokemon)) {
-        doppelgangerCount += 1;
-        continue;
+        doppelgangerCount += 1
+        continue
       }
 
-      let score: number = (hashCode * pokemonAmount) % pokemon.points;
+      const score: number = (hashCode * pokemonAmount) % pokemon.points
 
-      let goal: Goal = {
-        stage: stage,
-        pokemon: pokemon,
+      const goal: Goal = {
+        stage,
+        pokemon,
         score: Math.round(score / 10) * 10
-      };
+      }
 
-      goals.push(goal);
-      selectedPokemon.add(pokemon);
+      goals.push(goal)
+      selectedPokemon.add(pokemon)
 
-      pokemonAmount -= 1;
+      pokemonAmount -= 1
     }
 
   } else if (matchType === MatchType.STAGE) {
-    let stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount);
+    const stage: Stage = seededEnum(Stage, hashCode + hashCode ** pokemonAmount)
 
-    let stgPkmn: Pokemon[] | undefined = selectedStages.get(stage);
+    const stgPkmn: Pokemon[] | undefined = selectedStages.get(stage)
     if (stgPkmn === undefined) {
       throw new Error("Invalid Stage")
     }
-    let stagePokemon: Pokemon[] = stgPkmn;
+    const stagePokemon: Pokemon[] = stgPkmn
 
     if (stagePokemon.length < pokemonAmount) {
-      pokemonAmount = stagePokemon.length;
+      pokemonAmount = stagePokemon.length
     }
 
     while (pokemonAmount > 0) {
-      let amount = stagePokemon.length;
-      let pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount + doppelgangerCount) % amount];
+      const amount = stagePokemon.length
+      const pokemon: Pokemon = stagePokemon[(hashCode + pokemonAmount + doppelgangerCount) % amount]
 
       if (selectedPokemon.has(pokemon)) {
-        doppelgangerCount += 1;
-        continue;
+        doppelgangerCount += 1
+        continue
       }
 
-      let score: number = (hashCode * pokemonAmount) % pokemon.points;
+      const score: number = (hashCode * pokemonAmount) % pokemon.points
 
-      let goal: Goal = {
-        stage: stage,
-        pokemon: pokemon,
+      const goal: Goal = {
+        stage,
+        pokemon,
         score: Math.round(score / 10) * 10
-      };
+      }
 
-      goals.push(goal);
-      selectedPokemon.add(pokemon);
+      goals.push(goal)
+      selectedPokemon.add(pokemon)
 
-      pokemonAmount -= 1;
+      pokemonAmount -= 1
     }
 
   } else {
@@ -188,8 +185,8 @@ export async function generateMatch(selectedStages: Map<Stage, Pokemon[]>, input
   }
 
   return {
-    seed: seed,
+    seed,
     type: matchType,
-    goals: goals
+    goals
   }
 }

@@ -1,3 +1,3 @@
 interface String {
-  hashCode() : number;
+  hashCode() : number
 }
