@@ -3,15 +3,12 @@ import React from 'react';
 import queryString from 'query-string';
 
 import withStyles from '@material-ui/core/styles/withStyles';
-// core components
-import GridItem from '../../components/Grid/GridItem';
-import GridContainer from '../../components/Grid/GridContainer';
 
-import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle';
+import dashboardStyle from '@assets/jss/material-dashboard-react/views/dashboardStyle';
 import MenuItem from "@material-ui/core/MenuItem";
-import Button from "../../components/CustomButtons/Button";
 import {
-  FormControl,
+  Button,
+  FormControl, Grid,
   InputLabel,
   Select,
   Table,
@@ -21,7 +18,7 @@ import {
   TableRow,
   TextField
 } from "@material-ui/core";
-import {generateMatch, Goal, Match, MatchType, parseStage, Pokemon, Stage} from "./seedGenerator";
+import {generateMatch, Goal, Match, MatchType, parseStage, Pokemon, Stage} from "@services/seedGenerator";
 
 interface Props {
   location: any;
@@ -146,7 +143,7 @@ class Dashboard extends React.Component<Props, State> {
     });
   };
 
-  handleScoreCalculation = (event: React.ChangeEvent<{ value: unknown }>) => {
+  handleScoreCalculation = () => {
     // ! Create score calculation
     let currentScore = 0;
     this.state.pokemonScore.forEach((specificScore: number, specificGoal: Goal) => {
@@ -194,8 +191,8 @@ class Dashboard extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <GridContainer>
-          <GridItem xs={6} sm={3} md={2}>
+        <Grid container>
+          <Grid item xs={6} sm={3} md={2}>
             <FormControl
               fullWidth={true}
             >
@@ -209,8 +206,8 @@ class Dashboard extends React.Component<Props, State> {
                 <MenuItem value={MatchType[MatchType.FREE_FOR_ALL]}>Free For All</MenuItem>
               </Select>
             </FormControl>
-          </GridItem>
-          <GridItem xs={4} sm={2} md={1}>
+          </Grid>
+          <Grid item xs={4} sm={2} md={1}>
             <TextField
               id="standard-basic"
               label="Seed"
@@ -222,35 +219,35 @@ class Dashboard extends React.Component<Props, State> {
                 }
               }}
             />
-          </GridItem>
-          <GridItem xs={6} sm={4} md={2}>
+          </Grid>
+          <Grid item xs={6} sm={4} md={2}>
             Current Mode:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{MatchType[this.state.currentMatchType]}</InputLabel>
-          </GridItem>
-          <GridItem xs={6} sm={4} md={2}>
+          </Grid>
+          <Grid item xs={6} sm={4} md={2}>
             Current Seed:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{this.state.currentSeed}</InputLabel>
-          </GridItem>
-          <GridItem xs={3} sm={2} md={1}>
+          </Grid>
+          <Grid item xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
-              color="success"
+              color="primary"
               onClick={this.handleGameGenerate}
               >
               Generate
             </Button>
-          </GridItem>
-          <GridItem xs={6} sm={4} md={2}>
+          </Grid>
+          <Grid item xs={6} sm={4} md={2}>
             Current Score:<InputLabel id="demo-simple-select-label" style={{fontWeight: "bold"}}>{this.state.currentScore}</InputLabel>
-          </GridItem>
-          <GridItem xs={3} sm={2} md={1}>
+          </Grid>
+          <Grid item xs={3} sm={2} md={1}>
             <Button
               fullWidth={true}
-              color="rose"
+              color="secondary"
               onClick={this.handleScoreCalculation}
             >
               Calculate
             </Button>
-          </GridItem>
-        </GridContainer>
+          </Grid>
+        </Grid>
         <Table size="small" aria-label="a dense table">
           <TableHead style={{backgroundColor: "#ADD8E6"}}>
             <TableCell align="center">Stage</TableCell>

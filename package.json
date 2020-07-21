@@ -6,10 +6,10 @@
   "main": "public/Main.js",
   "homepage": "./",
   "dependencies": {
+    "@craco/craco": "^5.6.4",
     "@material-ui/core": "4.5.1",
     "@material-ui/icons": "4.5.1",
     "@types/classnames": "^2.2.9",
-    "chartist": "0.10.1",
     "classnames": "2.2.6",
     "gh-pages": "^2.1.1",
     "glob": "latest",
@@ -20,23 +20,22 @@
     "prop-types": "15.7.2",
     "query-string": "latest",
     "react": "^16.10.2",
-    "react-chartist": "0.13.3",
     "react-dom": "^16.10.2",
-    "react-google-maps": "9.4.5",
     "react-perfect-scrollbar": "latest",
     "react-router-dom": "5.0.1",
     "react-scripts": "^3.2.0",
     "react-swipeable-views": "0.13.3",
-    "sass-loader": "^8.0.0"
+    "sass-loader": "^8.0.0",
+    "tslint": "^6.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test --env=jsdom",
     "sass": "node-sass -w src/sass/ -o src/css/",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "eject": "react-scripts eject",
+    "eject": "craco eject",
     "electron-start": "electron .",
     "preelectron-pack": "yarn run build",
     "electron-pack": "electron-builder --win --macos -c.extraMetadata.main=build/Main.js"
@@ -51,6 +50,7 @@
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "@types/react-router-dom": "^5.1.0",
+    "craco-alias": "^2.1.1",
     "electron": "^8.2.2",
     "electron-builder": "^22.4.1",
     "glob": "latest",
@@ -58,6 +58,8 @@
     "query-string": "latest",
     "react-perfect-scrollbar": "latest",
     "seedrandom": "^3.0.5",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^5.0.0",
     "typescript": "^3.6.4"
   },
   "browserslist": {

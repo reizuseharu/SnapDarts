@@ -1,34 +1,15 @@
 /* eslint-disable */
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 // creates a beautiful scrollbar
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import routes from '../routes';
+import dashboardStyle from '@assets/jss/material-dashboard-react/layouts/dashboardStyle';
 
-import dashboardStyle from '../assets/jss/material-dashboard-react/layouts/dashboardStyle';
-
-import image from 'assets/img/sidebar-2.jpg';
-import DartsAppHeader from "../views/DartsApp/DartsAppHeader";
-
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === '/admin') {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-    })}
-  </Switch>
-);
+import image from '@assets/img/sidebar-2.jpg';
+import DartsAppHeader from "@views/DartsApp";
 
 interface Props {
   classes: any;
@@ -56,7 +37,7 @@ class Darts extends React.Component<Props, State> {
       mobileOpen: false
     };
   }
-  
+
   handleImageClick = (i: string) => {
     this.setState({ image: i });
   };
