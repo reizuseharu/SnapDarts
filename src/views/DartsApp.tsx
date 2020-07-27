@@ -2,9 +2,6 @@ import React from 'react'
 // @material-ui/core
 import queryString from 'query-string'
 
-import withStyles from '@material-ui/core/styles/withStyles'
-
-import dashboardStyle from '@assets/jss/material-dashboard-react/views/dashboardStyle'
 import MenuItem from "@material-ui/core/MenuItem"
 import {
   Button,
@@ -287,8 +284,4 @@ class Dashboard extends React.Component<Props, State> {
   }
 }
 
-// Dashboard.propTypes = {
-//   classes: PropTypes.object.isRequired
-// };
-
-export default withStyles(dashboardStyle)(Dashboard)
+export default Dashboard
