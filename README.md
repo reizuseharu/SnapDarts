@@ -1,5 +1,14 @@
 # SnapDarts
 
+![GitHub](https://img.shields.io/github/license/reizuseharu/SnapDarts)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reizuseharu/SnapDarts)
+![GitHub top language](https://img.shields.io/github/languages/top/reizuseharu/SnapDarts)
+
+![GitHub issues](https://img.shields.io/github/issues-raw/reizuseharu/SnapDarts)
+![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/reizuseharu/SnapDarts)
+
+---
+
 SnapDarts is a game for Pokémon Snap implemented as a web application.
 
 ## Usage
